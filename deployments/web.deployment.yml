@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: assets
-        image: docker-registry:5000/fox-web-assets
+        image: docker-registry.default.svc.cluster.local:5000/fox-web-assets
         volumeMounts:
         - name: assets
           mountPath: /assets
