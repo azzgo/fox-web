@@ -16,7 +16,7 @@ spec:
     command:
       - dockerd
       - --insecure-registry
-      - docker-registry.default.svc.cluster.local:5000
+      - harbor-harbor-registry:8080
     securityContext:
       privileged: true
   - name: kubectl
