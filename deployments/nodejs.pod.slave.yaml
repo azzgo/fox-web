@@ -16,7 +16,7 @@ spec:
     command:
       - dockerd
       - --insecure-registry
-      - docker-registry:5000
+      - docker-registry.default.svc.cluster.local:5000
     securityContext:
       privileged: true
   - name: kubectl
@@ -28,11 +28,3 @@ spec:
       runAsUser: 1000
       fsGroup: 1000
   serviceAccountName: jenkins
-  volumes:
-  - name: docker-registry-tls
-    secret:
-      secretName: docker-registry-tls
-      items: 
-      - key: ca.crt
-        path: ca.crt
-
