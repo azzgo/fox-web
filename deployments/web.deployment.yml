@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fox-web
+  labels:
+    app: fox-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fox-web
+  template:
+    metadata:
+      labels:
+        app: fox-web
+    spec:
+      containers:
+      - name: assets
+        image: docker-registry:5000/fox-web-assets
+        volumeMounts:
+        - name: assets
+          mountPath: /assets
+        command:
+          - sh -c "cp -r /tmp/assets/* /assets"
+      - name: nginx
+        image: nginx:1.17.7
+        volumeMounts:
+        - name: assets
+          mountPath: /usr/share/nginx/html
+        ports:
+          - containerPort: 80
+      volumes:
+      - name: assets
+        emptyDir: {}
+        
+    
+

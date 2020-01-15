@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins-slave: nodejs
+spec:
+  containers:
+  - name: nodejs
+    image: node:12.14.0-alpine3.10
+    tty: true
+    command:
+    - cat
+  - name: docker
+    image: docker:19.03.5-dind
+    tty: true
+    command:
+      - dockerd
+      - --insecure-registry
+      - docker-registry:5000
+    securityContext:
+      privileged: true
+  - name: kubectl
+    image: bitnami/kubectl:1.17-ol-7
+    tty: true
+    command:
+        - cat
+    securityContext:
+      runAsUser: 1000
+      fsGroup: 1000
+  serviceAccountName: jenkins
+  volumes:
+  - name: docker-registry-tls
+    secret:
+      secretName: docker-registry-tls
+      items: 
+      - key: ca.crt
+        path: ca.crt
+
