@@ -17,6 +17,9 @@ spec:
       - dockerd
       - --insecure-registry
       - harbor-harbor-registry:8080
+    volumeMounts:
+    - mountPath: /etc/docker/certs.d/core.harbor.domain
+      name: docker-registry-tls
     securityContext:
       privileged: true
   - name: kubectl
@@ -28,3 +31,11 @@ spec:
       runAsUser: 1000
       fsGroup: 1000
   serviceAccountName: jenkins
+  volumes:
+  - name: docker-registry-tls
+    secret:
+      secretName: docker-registry-tls
+      items: 
+      - key: ca.crt
+        path: ca.crt
+
