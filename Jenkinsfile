@@ -5,6 +5,10 @@ pipeline {
     }
   }
 
+  environment {
+    DOCKER_LOGIN_CRT = credentials('6a4e2e31-c411-4abd-8d1f-61028ffb5dee')
+  }
+
   stages {
     stage('构建前端工程') {
       steps {
@@ -18,6 +22,7 @@ pipeline {
     stage('构建镜像并上传仓库') {
       steps {
         container('docker') {
+          sh 'docker login docker-registry.default.svc.cluster.local:5000 -u $DOCKER_LOGIN_CRT_USER -p $DOCKER_LOGIN_CRT_PASS'
           sh 'docker build -f Dockerfile -t docker-registry.default.svc.cluster.local:5000/fox-web-assets:${GIT_COMMIT} .'
           sh 'docker tag docker-registry.default.svc.cluster.local:5000/fox-web-assets:${GIT_COMMIT} docker-registry.default.svc.cluster.local:5000/fox-web-assets:latest'
           sh 'docker push docker-registry.default.svc.cluster.local:5000/fox-web-assets:${GIT_COMMIT}'

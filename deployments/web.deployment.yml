@@ -18,6 +18,8 @@ spec:
       containers:
       - name: assets
         image: docker-registry.default.svc.cluster.local:5000/fox-web-assets
+        imagePullSecrets:
+        - name: docker-registry-pull-secret
         volumeMounts:
         - name: assets
           mountPath: /assets
