@@ -18,7 +18,7 @@ pipeline {
     stage('构建镜像并上传仓库') {
       steps {
         container('docker') {
-          sh 'docker build -f Dockerfile.k8s -t docker-registry:5000/fox-web-assets:${GIT_COMMIT} .'
+          sh 'docker build -f Dockerfile -t docker-registry:5000/fox-web-assets:${GIT_COMMIT} .'
           sh 'docker tag docker-registry:5000/fox-web-assets:${GIT_COMMIT} docker-registry:5000/fox-web-assets:latest'
           sh 'docker push docker-registry:5000/fox-web-assets:${GIT_COMMIT}'
           sh 'docker push docker-registry:5000/fox-web-assets:latest'
