@@ -22,7 +22,7 @@ pipeline {
     stage('构建镜像并上传仓库') {
       steps {
         container('docker') {
-          sh 'docker login docker-registry.default.svc.cluster.local:5000 -u $DOCKER_LOGIN_CRT_USR -p $DOCKER_LOGIN_CRT_PSW'
+          sh 'docker login docker-registry.default.svc.cluster.local:5000 -u ${DOCKER_LOGIN_CRT_USR} -p ${DOCKER_LOGIN_CRT_PSW}'
           sh 'docker build -f Dockerfile -t docker-registry.default.svc.cluster.local:5000/fox-web-assets:${GIT_COMMIT} .'
           sh 'docker tag docker-registry.default.svc.cluster.local:5000/fox-web-assets:${GIT_COMMIT} docker-registry.default.svc.cluster.local:5000/fox-web-assets:latest'
           sh 'docker push docker-registry.default.svc.cluster.local:5000/fox-web-assets:${GIT_COMMIT}'
