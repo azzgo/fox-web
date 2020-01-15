@@ -11,31 +11,23 @@ spec:
     command:
     - cat
   - name: docker
-    image: docker:19.03.5-dind
+    image: docker:19.03.5
     tty: true
+    volumneMounts:
+    - name: socks
+      mountPath: /var/run/docker.sock
     command:
-      - dockerd
-      - --insecure-registry
-      - harbor-harbor-registry:8080
-    volumeMounts:
-    - mountPath: /etc/docker/certs.d/harbor-harbor-registry
-      name: docker-registry-tls
-    securityContext:
-      privileged: true
+    - cat
   - name: kubectl
     image: bitnami/kubectl:1.17-ol-7
     tty: true
     command:
-        - cat
+      - cat
     securityContext:
       runAsUser: 1000
       fsGroup: 1000
   serviceAccountName: jenkins
   volumes:
-  - name: docker-registry-tls
-    secret:
-      secretName: docker-registry-tls
-      items: 
-      - key: ca.crt
-        path: ca.crt
+  - name: socks
+    hostPath: /var/run/docker.sock
 
