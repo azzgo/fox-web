@@ -18,7 +18,7 @@ spec:
       - --insecure-registry
       - harbor-harbor-registry:8080
     volumeMounts:
-    - mountPath: /etc/docker/certs.d/core.harbor.domain
+    - mountPath: /etc/docker/certs.d/harbor-harbor-registry
       name: docker-registry-tls
     securityContext:
       privileged: true
