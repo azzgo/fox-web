@@ -22,11 +22,11 @@ pipeline {
     stage('构建镜像并上传仓库') {
       steps {
         container('docker') {
-          sh 'docker loginharbor-harbor-registry:8080 -u ${DOCKER_LOGIN_CRT_USR} -p ${DOCKER_LOGIN_CRT_PSW}'
-          sh 'docker build -f Dockerfile -tharbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT} .'
-          sh 'docker tagharbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT}harbor-harbor-registry:8080/fox-web-assets:latest'
-          sh 'docker pushharbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT}'
-          sh 'docker pushharbor-harbor-registry:8080/fox-web-assets:latest'
+          sh 'docker login harbor-harbor-registry:8080 -u ${DOCKER_LOGIN_CRT_USR} -p ${DOCKER_LOGIN_CRT_PSW}'
+          sh 'docker build -f Dockerfile -t harbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT} .'
+          sh 'docker tag harbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT} harbor-harbor-registry:8080/fox-web-assets:latest'
+          sh 'docker push harbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT}'
+          sh 'docker push harbor-harbor-registry:8080/fox-web-assets:latest'
         }
       }
     }
