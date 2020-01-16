@@ -11,13 +11,14 @@ spec:
     command:
     - cat
   - name: docker
-    image: docker:19.03.5
+    image: docker:19.03.5-dind
     tty: true
-    volumneMounts:
-    - name: socks
-      mountPath: /var/run/docker.sock
     command:
-    - cat
+      - dockerd
+      - --insecure-registry
+      - docker-registry.default.svc.cluster.local:5000
+    securityContext:
+      privileged: true
   - name: kubectl
     image: bitnami/kubectl:1.17-ol-7
     tty: true
@@ -27,7 +28,3 @@ spec:
       runAsUser: 1000
       fsGroup: 1000
   serviceAccountName: jenkins
-  volumes:
-  - name: socks
-    hostPath: /var/run/docker.sock
-

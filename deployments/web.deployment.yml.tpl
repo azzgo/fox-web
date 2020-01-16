@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,21 +14,19 @@ spec:
       labels:
         app: fox-web
     spec:
-      containers:
+      initContainers:
       - name: assets
-        image: fox-web-assets
-        imagePullSecrets:
-        - name: docker-registry-pull-secret
+        image: {{DOCKER_REGISTRY_HOST}}/fox-web-assets:latest
         volumeMounts:
-        - name: assets
-          mountPath: /assets
-        command:
-          - sh -c "cp -r /tmp/assets/* /assets"
+        - mountPath: /assets
+          name: assets
+        command: ["sh", "-c", "cp -r /tmp/assets/* /assets"]
+      containers:
       - name: nginx
         image: nginx:1.17.7
         volumeMounts:
-        - name: assets
-          mountPath: /usr/share/nginx/html
+        - mountPath: /usr/share/nginx/html
+          name: assets
         ports:
           - containerPort: 80
       volumes:

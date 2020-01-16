@@ -6,7 +6,7 @@ pipeline {
   }
 
   environment {
-    DOCKER_LOGIN_CRT = credentials('6a4e2e31-c411-4abd-8d1f-61028ffb5dee')
+    DOCKER_REGISTRY_HOST="docker-registry.default.svc.cluster.local:5000"
   }
 
   stages {
@@ -22,11 +22,10 @@ pipeline {
     stage('构建镜像并上传仓库') {
       steps {
         container('docker') {
-          sh 'docker login harbor-harbor-registry:8080 -u ${DOCKER_LOGIN_CRT_USR} -p ${DOCKER_LOGIN_CRT_PSW}'
-          sh 'docker build -f Dockerfile -t harbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT} .'
-          sh 'docker tag harbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT} harbor-harbor-registry:8080/fox-web-assets:latest'
-          sh 'docker push harbor-harbor-registry:8080/fox-web-assets:${GIT_COMMIT}'
-          sh 'docker push harbor-harbor-registry:8080/fox-web-assets:latest'
+          sh 'docker build -f Dockerfile -t ${DOCKER_REGISTRY_HOST}/fox-web-assets:${GIT_COMMIT} .'
+          sh 'docker tag ${DOCKER_REGISTRY_HOST}/fox-web-assets:${GIT_COMMIT} ${DOCKER_REGISTRY_HOST}/fox-web-assets:latest'
+          sh 'docker push ${DOCKER_REGISTRY_HOST}/fox-web-assets:${GIT_COMMIT}'
+          sh 'docker push ${DOCKER_REGISTRY_HOST}/fox-web-assets:latest'
         }
       }
     }
@@ -36,9 +35,11 @@ pipeline {
         container('kubectl') {
           sh 'kubectl apply -o name --force -f ./deployments/web.service.yml'
           sh '''
+          DOCKER_REGISTRY_IP=$(kubectl get svc docker-registry -o jsonpath="{.spec.clusterIP}")
+          cat ./deployments/web.deployment.yml.tpl | sed s/{{DOCKER_REGISTRY_HOST}}/$DOCKER_REGISTRY_IP:5000/ > ./deployments/web.deployment.yml
           DEPLOYMENT_NAME=$(kubectl apply -o name --force -f ./deployments/web.deployment.yml)
           kubectl rollout status $DEPLOYMENT_NAME
-          '''
+          '''.stripIndent()
         }
       }
     }
