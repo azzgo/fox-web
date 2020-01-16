@@ -34,6 +34,7 @@ pipeline {
       steps {
         container('kubectl') {
           sh 'kubectl apply -o name --force -f ./deployments/web.service.yml'
+          sh 'kubectl apply -o name --force -f ./deployments/web.ingress.yml'
           sh '''
           DOCKER_REGISTRY_IP=$(kubectl get svc docker-registry -o jsonpath="{.spec.clusterIP}")
           cat ./deployments/web.deployment.yml.tpl | sed s/{{DOCKER_REGISTRY_HOST}}/$DOCKER_REGISTRY_IP:5000/ > ./deployments/web.deployment.yml
