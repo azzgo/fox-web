@@ -17,6 +17,8 @@ spec:
       initContainers:
       - name: assets
         image: {{DOCKER_REGISTRY_HOST}}/fox-web-assets:latest
+        imagePullSecrets:
+        - name: docker-registry-login
         volumeMounts:
         - mountPath: /assets
           name: assets

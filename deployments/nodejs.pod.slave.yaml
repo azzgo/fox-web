@@ -1,7 +1,6 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test
   labels:
     jenkins-slave: nodejs
 spec:
@@ -15,7 +14,7 @@ spec:
     image: docker:19.03.5-dind
     tty: true
     volumeMounts:
-    - name: docker-registry-tls
+    - name: docker-registry-ca
       mountPath: /etc/docker/certs.d/docker-registry.default.svc.cluster.local
     securityContext:
       privileged: true
@@ -24,8 +23,8 @@ spec:
     tty: true
     command:
       - cat
-  serviceAccountName: ci-robot
+    serviceAccountName: ci-robot
   volumes:
-  - name: docker-registry-tls
+  - name: docker-registry-ca
     secret:
-      secretName: docker-registry-tls
+      secretName: docker-registry-ca

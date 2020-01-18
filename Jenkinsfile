@@ -7,6 +7,7 @@ pipeline {
 
   environment {
     DOCKER_REGISTRY_HOST="docker-registry.default.svc.cluster.local:5000"
+    DOCKER_REGISTRY_LOGIN=credentials("docker-registry-login")
   }
 
   stages {
@@ -24,6 +25,7 @@ pipeline {
         container('docker') {
           sh 'docker build -f Dockerfile -t ${DOCKER_REGISTRY_HOST}/fox-web-assets:${GIT_COMMIT} .'
           sh 'docker tag ${DOCKER_REGISTRY_HOST}/fox-web-assets:${GIT_COMMIT} ${DOCKER_REGISTRY_HOST}/fox-web-assets:latest'
+          sh 'docker login ${DOCKER_REGISTRY_HOST} -u ${DOCKER_REGISTRY_LOGIN_USR} -p ${DOCKER_REGISTRY_LOGIN_PSW}'
           sh 'docker push ${DOCKER_REGISTRY_HOST}/fox-web-assets:${GIT_COMMIT}'
           sh 'docker push ${DOCKER_REGISTRY_HOST}/fox-web-assets:latest'
         }
