@@ -15,7 +15,7 @@ spec:
     tty: true
     volumeMounts:
     - name: docker-registry-ca
-      mountPath: "/etc/docker/certs.d/docker-registry.default.svc.cluster.local:5000"
+      mountPath: "/etc/docker/certs.d/docker-registry.default.svc.cluster.local"
     securityContext:
       privileged: true
   - name: kubectl
