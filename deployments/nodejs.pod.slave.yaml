@@ -13,10 +13,9 @@ spec:
   - name: docker
     image: docker:19.03.5-dind
     tty: true
-    command:
-      - dockerd
-      - --insecure-registry
-      - docker-registry.default.svc.cluster.local:5000
+    volumeMounts:
+    - name: docker-registry-tls
+      mounthPath: /etc/docker/certs.d/docker-registry.default.svc.cluster.local
     securityContext:
       privileged: true
   - name: kubectl
@@ -28,3 +27,7 @@ spec:
       runAsUser: 1000
       fsGroup: 1000
   serviceAccountName: jenkins
+  volumes:
+  - name: docker-registry-tls
+    secret:
+      secretName: docker-registry-tls
