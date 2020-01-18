@@ -6,7 +6,7 @@ pipeline {
   }
 
   environment {
-    DOCKER_REGISTRY_HOST="docker-registry.default.svc.cluster.local"
+    DOCKER_REGISTRY_HOST="docker-registry.192-168-33-10.nip.io"
     DOCKER_REGISTRY_LOGIN=credentials("docker-registry-login")
   }
 
