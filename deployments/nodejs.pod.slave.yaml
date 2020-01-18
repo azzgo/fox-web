@@ -26,7 +26,7 @@ spec:
     securityContext:
       runAsUser: 1000
       fsGroup: 1000
-  serviceAccountName: jenkins
+  serviceAccountName: ci-robot
   volumes:
   - name: docker-registry-tls
     secret:
