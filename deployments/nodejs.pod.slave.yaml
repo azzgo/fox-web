@@ -14,7 +14,7 @@ spec:
     image: docker:19.03.5-dind
     tty: true
     args:
-      - "--registry-mirror=https://myregistrydomain.com"
+      - "--registry-mirror=https://t9ab0rkd.mirror.aliyuncs.com"
     volumeMounts:
     - name: docker-registry-ca
       mountPath: "/etc/docker/certs.d/docker-registry.192-168-33-10.nip.io"
