@@ -23,7 +23,10 @@ spec:
     tty: true
     command:
       - cat
-    serviceAccountName: ci-robot
+    securityContext:
+      runAsUser: 1000
+      fsGroup: 1000
+  serviceAccountName: ci-robot
   volumes:
   - name: docker-registry-ca
     secret:
