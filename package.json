@@ -6,7 +6,7 @@
     "parcel-bundler": "^1.12.4"
   },
   "scripts": {
-    "start": "parcel watch public/index.html",
+    "start": "parcel public/index.html -d build",
     "build": "parcel build public/index.html -d build"
   },
   "browserslist": {
