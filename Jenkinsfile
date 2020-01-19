@@ -35,9 +35,9 @@ pipeline {
     stage('发布到开发环境') {
       steps {
         container('kubectl') {
-          sh 'kubectl apply -o name --force -f ./deployments/web.service.yaml'
+          sh 'kubectl apply -o name --force -f ./deployments/dev/service.yaml'
           sh '''
-          DEPLOYMENT_NAME=$(kubectl apply -o name --force -f ./deployments/web.deployment.yaml)
+          DEPLOYMENT_NAME=$(kubectl apply -o name --force -f ./deployments/dev/deployment.yaml)
           kubectl rollout status $DEPLOYMENT_NAME
           '''.stripIndent()
         }
